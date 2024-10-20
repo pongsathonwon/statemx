@@ -1,4 +1,4 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 
 type NameState = {
   firstname: string;
@@ -12,6 +12,14 @@ const initState: NameState = {
 
 const App = () => {
   const [fullname, setFullname] = useState<NameState>(initState);
+  const [fullnameText, setFullnameText] = useState<string>("");
+
+  useEffect(() => {
+    const { firstname, lastname } = fullname;
+    setFullnameText(
+      `${firstname.toUpperCase()} ${lastname.toLocaleUpperCase()}`
+    );
+  }, [fullname]);
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -19,6 +27,7 @@ const App = () => {
   };
   return (
     <form onSubmit={handleSubmit} className="flex flex-col mx-auto w-1/2 p-4">
+      <div>fullname: {fullnameText}</div>
       <label htmlFor="fName" className="flex justify-between p-1">
         firstname
         <input
