@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
-import { NameState } from "../App";
+import { NameState } from "../pages/App";
 
 type FormInputProps<T extends Record<string, unknown>> = {
   labelText: string;

@@ -1,5 +1,5 @@
 import { FormEvent, useEffect, useState } from "react";
-import FormInput from "./components/FormInput";
+import FormInput from "../components/FormInput";
 
 export type NameState = {
   firstname: string;
