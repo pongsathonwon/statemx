@@ -9,16 +9,27 @@ const initState: NameState = {
   firstname: "",
   lastname: "",
 };
-
+const validateAlphabet = (text: string) => {
+  const numRex = /\d/;
+  const isNum = numRex.test(text);
+  if (isNum) return null;
+  return text;
+};
 const App = () => {
   const [fullname, setFullname] = useState<NameState>(initState);
   const [fullnameText, setFullnameText] = useState<string>("");
-
+  const [toast, setToast] = useState<string | null>(null);
+  //const isFirstnameValid =
   useEffect(() => {
     const { firstname, lastname } = fullname;
-    setFullnameText(
-      `${firstname.toUpperCase()} ${lastname.toLocaleUpperCase()}`
-    );
+    const firstValidated = validateAlphabet(firstname);
+    const lastValidated = validateAlphabet(lastname);
+    if (firstValidated === null || lastValidated === null) {
+      setToast("ชื่อต้องไม่มีตัวเลข");
+      return;
+    }
+    setToast(null);
+    setFullnameText(`${firstValidated} ${lastValidated}`.toUpperCase());
   }, [fullname]);
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -27,6 +38,7 @@ const App = () => {
   };
   return (
     <form onSubmit={handleSubmit} className="flex flex-col mx-auto w-1/2 p-4">
+      {toast && <div>{toast}</div>}
       <div>fullname: {fullnameText}</div>
       <label htmlFor="fName" className="flex justify-between p-1">
         firstname
