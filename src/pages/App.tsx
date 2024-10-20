@@ -1,15 +1,11 @@
-import { FormEvent, useEffect, useState } from "react";
-import FormInput from "../components/FormInput";
+import { useEffect, useState } from "react";
+import { useDataContext } from "../context/DataContextProvider";
 
 export type NameState = {
   firstname: string;
   lastname: string;
 };
 
-const initState: NameState = {
-  firstname: "",
-  lastname: "",
-};
 const validateAlphabet = (text: string) => {
   const numRex = /\d/;
   const isNum = numRex.test(text);
@@ -17,12 +13,12 @@ const validateAlphabet = (text: string) => {
   return text;
 };
 const App = () => {
-  const [fullname, setFullname] = useState<NameState>(initState);
+  const { data } = useDataContext();
   const [fullnameText, setFullnameText] = useState<string>("");
   const [toast, setToast] = useState<string | null>(null);
   //const isFirstnameValid =
   useEffect(() => {
-    const { firstname, lastname } = fullname;
+    const { firstname, lastname } = data;
     const firstValidated = validateAlphabet(firstname);
     const lastValidated = validateAlphabet(lastname);
     if (firstValidated === null || lastValidated === null) {
@@ -31,44 +27,13 @@ const App = () => {
     }
     setToast(null);
     setFullnameText(`${firstValidated} ${lastValidated}`.toUpperCase());
-  }, [fullname]);
+  }, [data]);
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log(fullname);
-  };
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col mx-auto w-1/2 p-4">
+    <div className="container mx-auto p-4 flex flex-col items-center justify-center">
       {toast && <div>{toast}</div>}
       <div>fullname: {fullnameText}</div>
-      <FormInput
-        {...{
-          inputName: "firstname",
-          fullname,
-          setFullname,
-          labelText: "firstname",
-        }}
-      />
-      <FormInput
-        {...{
-          inputName: "lastname",
-          fullname,
-          setFullname,
-          labelText: "lastname",
-        }}
-      />
-      <div className="flex p-4 justify-between gap-4">
-        <button className="flex-1 bg-emerald-500" type="submit">
-          submit
-        </button>
-        <button
-          className="flex-1 bg-red-500"
-          onClick={() => setFullname(initState)}
-        >
-          clear
-        </button>
-      </div>
-    </form>
+    </div>
   );
 };
 
